@@ -1,17 +1,32 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    {{accounts}}
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
+  data() {
+    return {
+      accounts: null,
+    }
+  },
+  components: {},
+
+  async created() {
+    let web3
+    const Web3 = window.Web3 || undefined
+    if (window.ethereum && Web3) {
+      await window.ethereum.request({method:'eth_requestAccounts'}).catch(() => null)
+      web3 = new Web3(window.ethereum)
+
+      if (web3) {
+        web3.eth.getAccounts().then(result => {
+          this.accounts = result
+        })
+      }
+
+    }
   }
 }
 </script>
