@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    {{accounts}}
+    <div>account: {{accounts}}</div>
+    <div>balance: {{balances}}</div>
   </div>
 </template>
 
@@ -9,6 +10,7 @@ export default {
   data() {
     return {
       accounts: null,
+      balances: '0.00',
     }
   },
   components: {},
@@ -21,9 +23,16 @@ export default {
       web3 = new Web3(window.ethereum)
 
       if (web3) {
-        web3.eth.getAccounts().then(result => {
-          this.accounts = result
-        })
+        this.accounts = await web3.eth.getAccounts()
+        this.balances = await web3.eth.getBalance(this.accounts[0]) 
+        this.balances = web3.utils.fromWei(this.balances)
+
+        //console.log(new Web3.utils.BN( '5192959751830242563' ).div(Web3.utils.BN('2')).toString())
+        //console.log( new web3.utils.BN('5192959751830242563').div(new web3.utils.BN('1000000000000000000')).toFixed )
+        //console.log( new web3.utils.BN('7000000000000000000').sub(new web3.utils.BN('3000000000000000000')).toString() )
+        //console.log( new web3.utils.BN('7000000000000000000').mul(new web3.utils.BN('3')).toString() )
+        //console.log( new web3.utils.BN('8000000000000000000').div(new web3.utils.BN('4')).toString() )
+
       }
 
     }
